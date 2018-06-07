@@ -1,0 +1,64 @@
+﻿@model WebApplication1.Models.TouristicContentViewModel
+@{
+	ViewBag.Title = "Редактирование туристического контента";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-info">
+	С форматом XML для правил и вопросов можно ознакомится здесь
+</p>
+
+@using (Html.BeginForm("EditTouristicContent", "Smart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.HiddenFor(m => m.TouristicContent.ID)
+	@Html.HiddenFor(m => m.TouristicContent.TouristicContentType)
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.TouristicContent.Name, "Название:", new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextBoxFor(m => m.TouristicContent.Name, new { @class = "form-control" })
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.TouristicContent.Description, "Описание:", new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextAreaFor(m => m.TouristicContent.Description, new { @class = "form-control", style = "width: 1080px; height:300px;" })
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.TouristicContent.LogicalTag, "Имя в правилах логического вывода:", new {@class = "col-md-2 control-label"})
+		<div class="col-md-10">
+			@Html.TextBoxFor(m => m.TouristicContent.LogicalTag, new {@class = "form-control"})
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.TouristicContent.Price, "Ориентировочная цена:", new {@class = "col-md-2 control-label"})
+		<div class="col-md-10">
+			@Html.TextBoxFor(m => m.TouristicContent.Price, new {@class = "form-control"})
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.TouristicContent.PurchaseWayDescription, "Описание способа покупки:", new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextAreaFor(m => m.TouristicContent.PurchaseWayDescription, new { @class = "form-control", style = "width: 1080px; height:300px;" })
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<input type="submit" value="Сохранить" class="btn btn-default" />
+		</div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

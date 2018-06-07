@@ -1,0 +1,74 @@
+﻿@using System.Text
+@using System.Xml.Serialization
+@using Microsoft.AspNet.Identity
+@using WebApplication1.ExpertSystem
+@using WebApplication1.Models
+@using Constants = WebApplication1.Service.Constants
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Smart-система подбора туристического контента</h1>
+    <p class="lead"></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Smart-подбор туристического контента</h2>
+	    <p>
+		    @Html.ActionLink("Подбор тура", "Questions", "Smart", new { questionGroupId = Constants.TourGuid }, new { })&raquo;
+	    </p>
+	    <p>
+		    @Html.ActionLink("Подбор экскурсии", "Questions", "Smart", new { questionGroupId = Constants.ExcursionGuid }, new { })&raquo;
+	    </p>
+	    <p>
+		    @Html.ActionLink("Подбор мероприятия", "Questions", "Smart", new { questionGroupId = Constants.EventGuid }, new { })&raquo;
+	    </p>
+	    <p>
+		    @Html.ActionLink("Подбор гостиницы", "Questions", "Smart", new { questionGroupId = Constants.HotelGuid }, new { })&raquo;
+	    </p>
+		<p>
+			@Html.ActionLink("Подбор ресторана", "Questions", "Smart", new { questionGroupId = Constants.RestaurantGuid }, new { })&raquo;
+		</p>
+    </div>
+    <div class="col-md-4">
+		<h2>Каталог туристического контента</h2>
+		<p>
+			@Html.ActionLink("Туры", "TouristicContentList", "Smart", new { type = TouristicContentType.Tour }, new { })&raquo;
+		</p>
+		<p>
+			@Html.ActionLink("Экскурсии", "TouristicContentList", "Smart", new { type = TouristicContentType.Excursion }, new { })&raquo;
+		</p>
+		<p>
+			@Html.ActionLink("Мероприятия", "TouristicContentList", "Smart", new { type = TouristicContentType.Event }, new { })&raquo;
+		</p>
+		<p>
+			@Html.ActionLink("Гостиницы", "TouristicContentList", "Smart", new { type = TouristicContentType.Hotel }, new { })&raquo;
+		</p>
+		<p>
+			@Html.ActionLink("Рестораны", "TouristicContentList", "Smart", new { type = TouristicContentType.Restaurant }, new { })&raquo;
+		</p>
+    </div>
+	@if (User.Identity.GetUserId() == Constants.AdminGuid)
+	{
+		<div class="col-md-4">
+			<h2>Администрирование базы знаний Smart-системы</h2>
+			<p>
+				@Html.ActionLink("Подбор тура", "EditQuestionGroup", "Smart", new {id = Constants.TourGuid}, new {})&raquo;
+			</p>
+			<p>
+				@Html.ActionLink("Подбор экскурсии", "EditQuestionGroup", "Smart", new { id = Constants.ExcursionGuid }, new {})&raquo;
+			</p>
+			<p>
+				@Html.ActionLink("Подбор мероприятия", "EditQuestionGroup", "Smart", new { id = Constants.EventGuid }, new {})&raquo;
+			</p>
+			<p>
+				@Html.ActionLink("Подбор гостиницы", "EditQuestionGroup", "Smart", new { id = Constants.HotelGuid }, new {})&raquo;
+			</p>
+			<p>
+				@Html.ActionLink("Подбор ресторана", "EditQuestionGroup", "Smart", new { id = Constants.RestaurantGuid }, new {})&raquo;
+			</p>
+		</div>
+	}
+</div>

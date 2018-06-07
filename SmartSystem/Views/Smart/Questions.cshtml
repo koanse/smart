@@ -1,0 +1,58 @@
+﻿@model WebApplication1.Models.QuestionsViewModel
+@{
+	ViewBag.Title = Model.Title;
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-info">
+	Smart-подбор туристического контента
+</p>
+
+
+<img src="~/Content/logo.png"/>
+@{
+	using (Html.BeginForm("PostAnswers", "Smart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	{
+		@Html.HiddenFor(x => x.QuestionGroupId);
+
+		var selectedAnswerNumber = 0;
+		var questionNumber = 0;
+
+		 <table class="table">
+			 <tbody>
+			 @foreach (var q in Model.Questions)
+			 {
+				 <tr>
+					 <td colspan="2">@($"{questionNumber + 1}. {q.QuestionText}")</td>
+				 </tr>
+
+				 var answerNumber = 0;
+				 foreach (var a in q.Answers)
+				 {
+					 var currentIndex = questionNumber;
+					 <tr>
+						 <td>
+							 @Html.RadioButtonFor(x => x.SelectedAnswers[currentIndex], a.AnswerText, new { required = "required" })
+						 </td>
+						 <td>@($"{answerNumber + 1}. {a.AnswerText}")</td>
+					 </tr>
+
+					 selectedAnswerNumber++;
+
+					 answerNumber++;
+				 }
+				 questionNumber++;
+			 }
+			 </tbody>
+		 </table>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Завершить" class="btn btn-default" />
+			</div>
+		</div>
+	}
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

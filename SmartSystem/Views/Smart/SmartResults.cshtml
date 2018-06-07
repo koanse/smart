@@ -1,0 +1,19 @@
+﻿@model WebApplication1.Models.ResultsViewModel
+@{
+	ViewBag.Title = "Результаты Smart-подбора туристического контента";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-info">
+	@Model.Title
+</p>
+
+
+<img src="~/Content/logo.png"/><br/>
+@{
+	@Html.Raw(Model.Results)
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

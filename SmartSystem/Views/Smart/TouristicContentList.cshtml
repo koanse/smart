@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNet.Identity
+@using Constants = WebApplication1.Service.Constants
+@model WebApplication1.Models.TouristicContentsListViewModel
+@{
+	ViewBag.Title = $"Список туристического контента: {@Constants.GetDisplayName(Model.Type)}";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ActionLink("Добавить", "AddTouristicContent", new { type = Model.Type })
+<table class="table">
+	<tbody>
+	@{
+		var sortedList = Model.TouristicContents.OrderBy(x => x.Name);
+		foreach (var tc in sortedList)
+		 {
+			 <tr>
+				 <td>@tc.Name</td>
+				 <td>@tc.Price</td>
+				 <td>
+					 @if (User.Identity.GetUserId() == Constants.AdminGuid)
+					 {
+						 @Html.ActionLink("Подробнее", "ViewTouristicContent", new {id = tc.ID})
+						 <br>
+						 @Html.ActionLink("Редактировать", "EditTouristicContent", new {id = tc.ID})
+						 <br>
+						 @Html.ActionLink("Удалить", "RemoveTouristicContent", new {id = tc.ID})
+					 }
+					 else
+					 {
+						 @Html.ActionLink("Подробнее", "ViewTouristicContent", new {id = tc.ID})
+					 }
+				 </td>
+			 </tr>
+		 }
+	}
+	</tbody>
+</table>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

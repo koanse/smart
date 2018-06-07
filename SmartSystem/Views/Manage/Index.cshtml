@@ -1,0 +1,31 @@
+﻿@model WebApplication1.Models.IndexViewModel
+@{
+    ViewBag.Title = "Личный кабинет";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Изменение настроек аккаунта</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Пароль:</dt>
+	    <dd>
+		    [
+		    @if (Model.HasPassword)
+		    {
+			    @Html.ActionLink("Изменить пароль", "ChangePassword")
+		    }
+		    else
+		    {
+			    @Html.ActionLink("Create", "SetPassword")
+		    }
+		    ]
+	    </dd>
+		<dt>Предыдущие результаты Smart-подбора:</dt>
+	    <dd>
+		    @Html.Raw(Model.PreviousResults)
+	    </dd>
+    </dl>
+</div>

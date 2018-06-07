@@ -1,0 +1,71 @@
+﻿@model WebApplication1.Models.QuestionGroupViewModel
+@{
+	ViewBag.Title = "Редактирование группы вопросов";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-info">
+	С примером формата XML для правил и вопросов можно ознакомиться @Html.ActionLink("здесь", "QuestionGroupExample")
+</p>
+
+@using (Html.BeginForm("EditQuestionGroup", "Smart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.HiddenFor(m => m.QuestionGroup.ID)
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.QuestionGroup.Name, "Название группы вопросов:", new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextBoxFor(m => m.QuestionGroup.Name, new { @class = "form-control" })
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.QuestionGroup.Description, "Описание группы вопросов:", new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextBoxFor(m => m.QuestionGroup.Description, new { @class = "form-control" })
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.QuestionGroup.RulesXml, "XML правил базы знаний логического вывода для группы вопросов:",
+			new {@class = "col-md-2 control-label"})
+		<div class="col-md-10">
+			@Html.TextAreaFor(m => m.QuestionGroup.RulesXml, new {@class = "form-control", style = "width: 1080px; height:300px;"})
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.RulesText, "Правила базы знаний логического вывода для группы вопросов:",
+			new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.Label(Model.RulesText)
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		@Html.LabelFor(m => m.QuestionGroup.QuestionsXml, "XML вопросов:", new {@class = "col-md-2 control-label"})
+		<div class="col-md-10">
+			@Html.TextAreaFor(m => m.QuestionGroup.QuestionsXml, new {@class = "form-control", style = "width: 1080px; height:300px;"})
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.QuestionsText, "Вопросы:",
+			new {@class = "col-md-2 control-label"})
+		<div class="col-md-10">
+			@Html.Label(Model.QuestionsText)
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<input type="submit" value="Сохранить" class="btn btn-default" />
+		</div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

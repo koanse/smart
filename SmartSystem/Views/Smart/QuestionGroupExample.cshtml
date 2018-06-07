@@ -1,0 +1,201 @@
+﻿@using System.Text
+@using System.Xml.Serialization
+@using WebApplication1.ExpertSystem
+@using WebApplication1.Models
+@model WebApplication1.Models.QuestionGroupViewModel
+@{
+    ViewBag.Title = "Пример заполнения группы вопросов";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-info">
+	Переменная с результатами логического вывода должна иметь имя result.
+</p>
+
+
+	@{
+		var serializers = XmlSerializer.FromTypes(new Type[] {typeof (List<Rule>), typeof (List<Clause>), typeof (List<Question>)});
+		var ruleSerializer = serializers[0];
+		var factsSerializer = serializers[1];
+		var questionSerializer = serializers[2];
+
+		var ms = new MemoryStream();
+
+
+		var result = string.Empty;
+		RuleInferenceEngine rie = new RuleInferenceEngine();
+
+		Rule rule = new Rule("Bicycle");
+		rule.AddAntecedent(new IsClause("resultType", "cycle"));
+		rule.AddAntecedent(new IsClause("num_wheels", "2"));
+		rule.AddAntecedent(new IsClause("motor", "no"));
+		rule.SetConsequent(new IsClause("result", "Bicycle"));
+		rie.AddRule(rule);
+
+		rule = new Rule("Tricycle");
+		rule.AddAntecedent(new IsClause("resultType", "cycle"));
+		rule.AddAntecedent(new IsClause("num_wheels", "3"));
+		rule.AddAntecedent(new IsClause("motor", "no"));
+		rule.SetConsequent(new IsClause("result", "Tricycle"));
+		rie.AddRule(rule);
+
+		rule = new Rule("Motorcycle");
+		rule.AddAntecedent(new IsClause("resultType", "cycle"));
+		rule.AddAntecedent(new IsClause("num_wheels", "2"));
+		rule.AddAntecedent(new IsClause("motor", "yes"));
+		rule.SetConsequent(new IsClause("result", "Motorcycle"));
+		rie.AddRule(rule);
+
+		rule = new Rule("SportsCar");
+		rule.AddAntecedent(new IsClause("resultType", "automobile"));
+		rule.AddAntecedent(new IsClause("size", "medium"));
+		rule.AddAntecedent(new IsClause("num_doors", "2"));
+		rule.SetConsequent(new IsClause("result", "Sports_Car"));
+		rie.AddRule(rule);
+
+		rule = new Rule("Sedan");
+		rule.AddAntecedent(new IsClause("resultType", "automobile"));
+		rule.AddAntecedent(new IsClause("size", "medium"));
+		rule.AddAntecedent(new IsClause("num_doors", "4"));
+		rule.SetConsequent(new IsClause("result", "Sedan"));
+		rie.AddRule(rule);
+
+		rule = new Rule("MiniVan");
+		rule.AddAntecedent(new IsClause("resultType", "automobile"));
+		rule.AddAntecedent(new IsClause("size", "medium"));
+		rule.AddAntecedent(new IsClause("num_doors", "3"));
+		rule.SetConsequent(new IsClause("result", "MiniVan"));
+		rie.AddRule(rule);
+
+
+		rule = new Rule("MiniVanCopy");
+		rule.AddAntecedent(new IsClause("resultType", "automobile"));
+		rule.AddAntecedent(new IsClause("size", "medium"));
+		rule.AddAntecedent(new IsClause("num_doors", "3"));
+		rule.SetConsequent(new IsClause("result", "MiniVan2"));
+		rie.AddRule(rule);
+
+		rule = new Rule("SUV");
+		rule.AddAntecedent(new IsClause("resultType", "automobile"));
+		rule.AddAntecedent(new IsClause("size", "large"));
+		rule.AddAntecedent(new IsClause("num_doors", "4"));
+		rule.SetConsequent(new IsClause("result", "SUV"));
+		rie.AddRule(rule);
+
+		rule = new Rule("Cycle");
+		rule.AddAntecedent(new LessClause("num_wheels", "4"));
+		rule.SetConsequent(new IsClause("resultType", "cycle"));
+		rie.AddRule(rule);
+
+		rule = new Rule("Automobile");
+		rule.AddAntecedent(new IsClause("num_wheels", "4"));
+		rule.AddAntecedent(new IsClause("motor", "yes"));
+		rule.SetConsequent(new IsClause("resultType", "automobile"));
+		rie.AddRule(rule);
+
+		var rules = rie.Rules;
+
+
+		ms = new MemoryStream();
+
+		var question1 = new Question
+		{
+			QuestionText = "Число колес транспортного средства:",
+			Answers = new List<Answer>
+			{
+				new Answer
+				{
+					AnswerText = "Два",
+					AnswerFactsList = new List<Clause> {new IsClause("num_wheels", "2")}
+				},
+				new Answer
+				{
+					AnswerText = "Три",
+					AnswerFactsList = new List<Clause> {new IsClause("num_wheels", "3")}
+				},
+				new Answer
+				{
+					AnswerText = "Четыре",
+					AnswerFactsList = new List<Clause> {new IsClause("num_wheels", "4")}
+				},
+
+			}
+		};
+
+		ms = new MemoryStream();
+
+		var question2 = new Question
+		{
+			QuestionText = "Размер транспортного средства:",
+			Answers = new List<Answer>
+			{
+				new Answer
+				{
+					AnswerText = "Средний",
+					AnswerFactsList = new List<Clause> {new IsClause("size", "medium")}
+				},
+				new Answer
+				{
+					AnswerText = "Большой",
+					AnswerFactsList = new List<Clause> {new IsClause("size", "large")}
+				},
+				new Answer
+				{
+					AnswerText = "Малый",
+					AnswerFactsList = new List<Clause> {new IsClause("size", "small")}
+				},
+
+			}
+		};
+
+
+		rie.AddFact(new IsClause("num_wheels", "4"));
+		rie.AddFact(new IsClause("motor", "yes"));
+		rie.AddFact(new IsClause("num_doors", "3"));
+		rie.AddFact(new IsClause("size", "medium"));
+
+
+		ruleSerializer.Serialize(ms, rie.Rules);
+
+		ms.Position = 0;
+
+
+		result += $"Факты до логического вывода: {rie.Facts}<br>";
+		rie.Infer();
+		result += $"Факты после прямой цепочки логического вывода: {rie.Facts}<br>";
+
+		var html = new HtmlString(result);
+
+		ms = new MemoryStream();
+		ruleSerializer.Serialize(ms, rie.Rules);
+		var rulesXml = Encoding.UTF8.GetString(ms.ToArray());
+
+		ms = new MemoryStream();
+		questionSerializer.Serialize(ms, new List<Question> {question1, question2});
+		var questionXml = Encoding.UTF8.GetString(ms.ToArray());
+
+		Model.QuestionGroup = new QuestionGroup
+		{
+			RulesXml = rulesXml,
+			QuestionsXml = questionXml
+		};
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.QuestionGroup.RulesXml, "XML правил базы знаний логического вывода для группы вопросов:", new {@class = "col-md-2 control-label"})
+			<div class="col-md-10">
+				@Html.TextAreaFor(m => m.QuestionGroup.RulesXml, new {text = rulesXml, @class = "form-control", style = "width: 1080px; height:300px;"})
+			</div>
+		</div>
+
+		<hr/>
+		<div class="form-group">
+			@Html.LabelFor(m => m.QuestionGroup.QuestionsXml, "XML вопросов:", new {@class = "col-md-2 control-label"})
+			<div class="col-md-10">
+				@Html.TextAreaFor(m => m.QuestionGroup.QuestionsXml, new {value = questionXml, @class = "form-control", style = "width: 1080px; height:300px;"})
+			</div>
+		</div>
+	}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
